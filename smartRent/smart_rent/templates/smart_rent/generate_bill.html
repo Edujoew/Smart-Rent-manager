@@ -1,0 +1,33 @@
+{% extends 'smart_rent/base.html' %}
+
+{% block title %}Generate Bill for {{ tenant.user.get_full_name }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">New Reading: {{ tenant.user.get_full_name }}</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Unit: {{ tenant.property.name }} | Monthly Rent: <strong>KES {{ tenant.rent_amount }}</strong></p>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Water Meter Reading</label>
+                        {{ form.water_reading }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Electricity Meter Reading</label>
+                        {{ form.elecricity_reading }}
+                    </div>
+                    <hr>
+                    <button type="submit" class="btn btn-success w-100">Calculate & Save Bill</button>
+                    <a href="{% url 'dashboard' %}" class="btn btn-link w-100 mt-2 text-decoration-none">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'smart_rent/base.html' %}
+
+{% block title %}Landlord Dashboard{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-header bg-white">
+        <h4 class="mb-0">Tenant Overview</h4>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tenant</th>
+                    <th>Property</th>
+                    <th>M-Pesa Number</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tenant in tenants %}
+                <tr>
+                    <td>{{ tenant.user.get_full_name }}</td>
+                    <td>{{ tenant.property.name }}</td>
+                    <td>{{ tenant.phone_number }}</td>
+                    <td>
+                        <a href="{% url 'generate_bill' tenant.id %}" class="btn btn-primary btn-sm">Create Bill</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
