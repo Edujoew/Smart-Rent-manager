@@ -1,0 +1,59 @@
+{% extends 'smart_rent/base.html' %}
+
+{% block title %}Create Account | SmartRent{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-lg border-0">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="bi bi-person-plus-fill fs-3"></i>
+                    </div>
+                    <h2 class="fw-bold">Tenant Registration</h2>
+                    <p class="text-muted">Join your property to start managing bills.</p>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger x-small">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    
+                    <button type="submit" class="btn btn-primary w-100 py-2 fw-bold mt-3">Create My Account</button>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="small text-muted">Already a member? <a href="{% url 'login' %}" class="text-decoration-none fw-bold">Login here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Ensures Django's form fields look like Bootstrap controls */
+    input, select { 
+        display: block;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        font-size: 1rem;
+        border: 1px solid #dee2e6;
+        border-radius: 0.5rem;
+        margin-bottom: 5px;
+    }
+    input:focus, select:focus {
+        border-color: #0d6efd;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+    .x-small { font-size: 0.75rem; }
+</style>
+{% endblock %}

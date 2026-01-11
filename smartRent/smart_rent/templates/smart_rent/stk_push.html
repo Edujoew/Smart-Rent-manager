@@ -1,0 +1,111 @@
+{% extends 'smart_rent/base.html' %}
+
+{% block title %}Processing Payment{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <div class="card border-0 shadow-lg p-5">
+                <div id="status-icon-container" class="mb-4">
+                    <div class="spinner-border text-primary" style="width: 4rem; height: 4rem;" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+
+                <h2 id="status-title" class="fw-bold mb-3">STK Push Sent!</h2>
+                <p id="status-text" class="text-muted mb-4">
+                    A secure M-Pesa prompt has been sent to the phone for <strong>KES {{ bill.total_amount }}</strong>. 
+                    Please enter the PIN to authorize the payment.
+                </p>
+
+                <div class="progress mb-4" style="height: 12px;">
+                    <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: 100%"></div>
+                </div>
+
+                <div class="mb-4">
+                    <span id="status-badge" class="badge bg-light text-dark border p-2">Waiting for confirmation...</span>
+                </div>
+
+                <button type="button" class="btn btn-outline-danger px-4 rounded-pill" data-bs-toggle="modal" data-bs-target="#cancelModal">
+                    Cancel Transaction
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">Cancel Transaction?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-start">
+                Are you sure you want to stop waiting? If the payment is already being processed on the phone, it may still complete, but you will be returned to your dashboard.
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">Keep Waiting</button>
+                <button type="button" id="confirm-cancel-action" class="btn btn-danger rounded-pill px-4">Yes, Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // 1. Properly quote variables to fix the "Property assignment expected" error
+    const checkoutId = "{{ checkout_id }}";
+    const userRoleIsStaff = "{{ request.user.is_staff }}"; 
+    
+    // 2. Logic to prevent the 404 "No Tenant matches" error
+    // If Admin, go to dashboard. If Tenant, go to portal.
+    const destinationUrl = (userRoleIsStaff === "True") ? "{% url 'dashboard' %}" : "{% url 'tenant_portal' %}";
+
+    // 3. Handle the Cancel Button in the Modal
+    document.getElementById('confirm-cancel-action').addEventListener('click', function() {
+        clearInterval(pollInterval);
+        window.location.href = destinationUrl;
+    });
+
+    // 4. Status Polling Logic
+    const pollPaymentStatus = () => {
+        fetch(`/check-status/${checkoutId}/`)
+            .then(response => response.json())
+            .then(data => {
+                const statusTitle = document.getElementById('status-title');
+                const statusText = document.getElementById('status-text');
+                const progressBar = document.getElementById('progress-bar');
+                const iconContainer = document.getElementById('status-icon-container');
+                const badge = document.getElementById('status-badge');
+
+                if (data.status === 'Success') {
+                    clearInterval(pollInterval);
+                    iconContainer.innerHTML = '<i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>';
+                    statusTitle.innerText = "Payment Successful!";
+                    statusText.innerText = "The transaction has been confirmed. Redirecting...";
+                    progressBar.className = "progress-bar bg-success";
+                    badge.className = "badge bg-success p-2";
+                    badge.innerText = "Confirmed";
+                    
+                    setTimeout(() => { window.location.href = destinationUrl; }, 2000);
+                } 
+                else if (data.status === 'Failed') {
+                    clearInterval(pollInterval);
+                    iconContainer.innerHTML = '<i class="bi bi-x-circle-fill text-danger" style="font-size: 4rem;"></i>';
+                    statusTitle.innerText = "Transaction Failed";
+                    statusText.innerText = "The payment was declined, cancelled, or timed out.";
+                    progressBar.className = "progress-bar bg-danger";
+                    badge.className = "badge bg-danger p-2";
+                    badge.innerText = "Failed";
+
+                    setTimeout(() => { window.location.href = destinationUrl; }, 3000);
+                }
+            })
+            .catch(err => console.error("Error polling status:", err));
+    };
+
+    const pollInterval = setInterval(pollPaymentStatus, 3000);
+</script>
+{% endblock %}

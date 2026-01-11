@@ -1,0 +1,58 @@
+{% extends 'smart_rent/base.html' %}
+
+{% block title %}Welcome to SmartRent | PropTech Management{% endblock %}
+
+{% block content %}
+<div class="row align-items-center py-5">
+    <div class="col-lg-6">
+        <h1 class="display-3 fw-bold lh-1 mb-3">Manage Your Property <span class="text-primary">Smarter.</span></h1>
+        <p class="lead text-muted mb-4">
+            The all-in-one platform for landlords and tenants. Track utility bills, manage payments, and stay connected with your property manager seamlessly.
+        </p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            <a href="{% url 'register' %}" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Get Started</a>
+            <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg px-4">Sign In</a>
+        </div>
+    </div>
+    <div class="col-lg-6 d-none d-lg-block">
+        <div class="card bg-primary text-white p-5 shadow-lg border-0">
+            <div class="card-body text-center">
+                <i class="bi bi-houses-fill" style="font-size: 6rem;"></i>
+                <h3 class="mt-3 fw-bold">PropTech Simplified</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="my-5">
+
+<div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+    <div class="col d-flex align-items-start">
+        <div class="icon-square bg-light text-primary flex-shrink-0 me-3 p-3 rounded shadow-sm">
+            <i class="bi bi-lightning-charge-fill"></i>
+        </div>
+        <div>
+            <h3 class="fs-4 fw-bold">Fast Invoicing</h3>
+            <p>Landlords can generate utility bills for electricity and water in just two clicks.</p>
+        </div>
+    </div>
+    <div class="col d-flex align-items-start">
+        <div class="icon-square bg-light text-primary flex-shrink-0 me-3 p-3 rounded shadow-sm">
+            <i class="bi bi-shield-check"></i>
+        </div>
+        <div>
+            <h3 class="fs-4 fw-bold">Secure Payments</h3>
+            <p>Tenants can track their payment history and see outstanding balances in real-time.</p>
+        </div>
+    </div>
+    <div class="col d-flex align-items-start">
+        <div class="icon-square bg-light text-primary flex-shrink-0 me-3 p-3 rounded shadow-sm">
+            <i class="bi bi-graph-up-arrow"></i>
+        </div>
+        <div>
+            <h3 class="fs-4 fw-bold">Data Insights</h3>
+            <p>Monitor property occupancy and financial health through an intuitive dashboard.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

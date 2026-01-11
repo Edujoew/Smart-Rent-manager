@@ -1,0 +1,33 @@
+{% extends 'smart_rent/base.html' %}
+
+{% block title %}Confirm Payment{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h4 class="fw-bold mb-3 text-center">Confirm Payment</h4>
+                <div class="alert alert-info small">
+                    <strong>Total Due:</strong> KES {{ bill.total_amount }}
+                </div>
+                
+                <form method="POST" action="{% url 'pay_bill' bill.id %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">M-Pesa Phone Number</label>
+                        <input type="text" name="phone" class="form-control" 
+                               placeholder="2547XXXXXXXX" value="{{ bill.tenant.phone_number }}" required>
+                        <div class="form-text">Ensure the number starts with 254.</div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success w-100 py-2 fw-bold">
+                        <i class="bi bi-phone me-2"></i>Send STK Push
+                    </button>
+                    <a href="{% url 'tenant_portal' %}" class="btn btn-link w-100 text-muted small mt-2">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'smart_rent/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-body p-4">
+                    <h3 class="fw-bold mb-4"><i class="bi bi-house-add me-2 text-success"></i>Add New Property</h3>
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success rounded-pill">Save Property</button>
+                            <a href="{% url 'dashboard' %}" class="btn btn-light rounded-pill text-muted">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

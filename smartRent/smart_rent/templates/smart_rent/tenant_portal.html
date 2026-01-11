@@ -1,0 +1,101 @@
+{% extends 'smart_rent/base.html' %}
+
+{% block title %}My Tenant Portal{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm bg-primary text-white">
+            <div class="card-body d-flex justify-content-between align-items-center p-4">
+                <div>
+                    <h6 class="text-white-50 mb-1">Total Outstanding Balance</h6>
+                    <h1 class="fw-bold mb-0">KES {{ total_due }}</h1>
+                </div>
+                <i class="bi bi-wallet2 display-4 text-white-50"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body text-center">
+                <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                    <i class="bi bi-person-badge fs-1"></i>
+                </div>
+                <h4 class="fw-bold">{{ user.get_full_name|default:user.username }}</h4>
+                <p class="text-muted">{{ tenant.property.name }}</p>
+                <hr>
+                <div class="text-start small">
+                    <p class="d-flex justify-content-between"><strong>M-Pesa:</strong> <span>{{ tenant.phone_number }}</span></p>
+                    <p class="d-flex justify-content-between"><strong>Monthly Rent:</strong> <span>KES {{ tenant.rent_amount }}</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 fw-bold"><i class="bi bi-clock-history me-2 text-primary"></i>My Billing History</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="ps-4">Date</th>
+                                <th>Breakdown</th>
+                                <th>Total Bill</th>
+                                <th>Status</th>
+                                <th class="text-end pe-4">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for bill in bills %}
+                            <tr>
+                                <td class="ps-4">
+                                    <span class="d-block fw-bold text-dark">{{ bill.billing_date|date:"M d, Y" }}</span>
+                                    <small class="text-muted">Bill #{{ bill.id }}</small>
+                                </td>
+                                <td>
+                                    <small class="d-block text-muted">Water: {{ bill.water_reading }} units</small>
+                                    <small class="d-block text-muted">Elec: {{ bill.elecricity_reading }} units</small>
+                                </td>
+                                <td>
+                                    <span class="fw-bold text-primary">KES {{ bill.total_amount }}</span>
+                                </td>
+                                <td>
+                                    {% if bill.is_paid %}
+                                        <span class="badge bg-success-subtle text-success border border-success border-opacity-25 px-2">Paid</span>
+                                    {% else %}
+                                        <span class="badge bg-danger-subtle text-danger border border-danger border-opacity-25 px-2">Unpaid</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-end pe-4">
+                                    {% if not bill.is_paid %}
+                                        <a href="{% url 'pay_bill' bill.id %}" class="btn btn-primary btn-sm rounded-pill px-3">Pay Now</a>
+                                    {% else %}
+                                        <a href="{% url 'download_receipt' bill.id %}" class="btn btn-outline-dark btn-sm rounded-pill px-3">
+                                            <i class="bi bi-download me-1"></i>Receipt
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    <i class="bi bi-inbox display-6 d-block mb-2"></i>
+                                    No billing records found.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
