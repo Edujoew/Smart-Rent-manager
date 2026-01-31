@@ -1,0 +1,56 @@
+{% extends 'smart_rent/base.html' %}
+
+{% block title %}Tenant Directory | SmartRent{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold text-primary"><i class="bi bi-people-fill me-2"></i>Active Tenant Directory</h5>
+            <a href="{% url 'add_tenant' %}" class="btn btn-primary btn-sm rounded-pill px-3">
+                <i class="bi bi-person-plus-fill me-1"></i> Manual Add
+            </a>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0 text-nowrap">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4">Tenant Name</th>
+                            <th>Property</th>
+                            <th>Phone</th>
+                            <th class="text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tenant in tenants %}
+                        <tr>
+                            <td class="ps-4">
+                                <div class="fw-bold">{{ tenant.full_name|default:tenant.user.get_full_name|default:tenant.user.username }}</div>
+                            </td>
+                            <td>{{ tenant.property.name|default:"Unassigned" }}</td>
+                            <td><code class="text-primary fw-bold">{{ tenant.phone_number }}</code></td>
+                            <td class="text-end pe-4">
+                                <div class="btn-group shadow-sm">
+                                    <a href="{% url 'generate_bill' tenant.id %}" class="btn btn-outline-primary btn-sm" title="Generate Bill">
+                                        <i class="bi bi-receipt"></i> Bill
+                                    </a>
+                                    <a href="{% url 'edit_tenant' tenant.id %}" class="btn btn-outline-warning btn-sm" title="Update Details">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a href="{% url 'delete_tenant' tenant.id %}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure?')" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="4" class="text-center py-4">No active tenants found.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

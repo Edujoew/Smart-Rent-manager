@@ -125,11 +125,10 @@ STATIC_URL = 'static/'
 # settings.py
 
 
-LOGIN_REDIRECT_URL = 'landing' 
 
-\
-LOGIN_URL = 'login'
-LOGOUT_REDIRECT_URL = 'landing'
+
+LOGIN_REDIRECT_URL = 'dashboard'
+LOGOUT_REDIRECT_URL = 'landing'  
 
 # ============= MPESA SETTINGS =============
 # The Mpesa environment to use
@@ -172,3 +171,8 @@ MPESA_INITIATOR_USERNAME = 'initiator_username'
 # Plaintext password for initiator (to be used in B2C, B2B, AccountBalance and TransactionStatusQuery Transactions)
 
 MPESA_INITIATOR_SECURITY_CREDENTIAL = 'initiator_security_credential'
+
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

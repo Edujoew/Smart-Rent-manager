@@ -1,98 +1,216 @@
 {% extends 'smart_rent/base.html' %}
+{% load static %}
 
-{% block title %}My Tenant Portal{% endblock %}
+{% block title %}Tenant Portal | SmartRent{% endblock %}
 
 {% block content %}
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="card border-0 shadow-sm bg-primary text-white">
-            <div class="card-body d-flex justify-content-between align-items-center p-4">
-                <div>
-                    <h6 class="text-white-50 mb-1">Total Outstanding Balance</h6>
-                    <h1 class="fw-bold mb-0">KES {{ total_due }}</h1>
+<style>
+    :root {
+        --glass-bg: rgba(255, 255, 255, 0.75);
+        --glass-border: rgba(255, 255, 255, 0.3);
+        --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    }
+
+    .main-wrapper {
+        background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4)), 
+                    url('https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1920&q=80');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        min-height: 100vh;
+        padding: 40px 0;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .glass-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        transition: all 0.3s ease;
+    }
+
+    .glass-card:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.85);
+    }
+
+    .profile-avatar {
+        width: 70px;
+        height: 70px;
+        background: var(--primary-gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        color: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .balance-card {
+        background: #1e1e2e;
+        border-radius: 24px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .balance-card::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+    }
+
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+
+    .btn-gradient {
+        background: var(--primary-gradient);
+        border: none;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 14px;
+        font-weight: 600;
+        transition: opacity 0.3s;
+    }
+
+    .btn-gradient:hover {
+        opacity: 0.9;
+        color: white;
+    }
+</style>
+
+<div class="main-wrapper">
+    <div class="container">
+        <div class="row g-4 mb-4">
+            <div class="col-lg-8">
+                <div class="card glass-card p-4 border-0">
+                    <div class="d-flex align-items-center">
+                        <div class="profile-avatar me-4">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h2 class="fw-bold mb-1 text-dark">{{ tenant.full_name|default:tenant.user.username }}</h2>
+                                    <span class="badge bg-white text-primary border border-primary-subtle rounded-pill px-3 py-2">
+                                        <i class="bi bi-geo-alt-fill me-1"></i> {{ tenant.property.name|default:"Pinnacle Towers" }}
+                                    </span>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2">
+                                        <i class="bi bi-shield-check me-1"></i> Account in Good Standing
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <i class="bi bi-wallet2 display-4 text-white-50"></i>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card balance-card p-4 border-0 h-100 shadow-lg">
+                    <h6 class="text-white-50 text-uppercase small fw-bold mb-3">Total Outstanding</h6>
+                    <h1 class="display-5 fw-bold text-warning mb-2">KES {{ total_due|floatformat:0 }}</h1>
+                    <div class="d-flex justify-content-between mt-auto pt-3 border-top border-secondary">
+                        <small class="text-white-50">M-Pesa Number:</small>
+                        <small class="fw-bold">{{ tenant.phone_number }}</small>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
-<div class="row">
-    <div class="col-md-4">
-        <div class="card border-0 shadow-sm mb-4">
-            <div class="card-body text-center">
-                <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                    <i class="bi bi-person-badge fs-1"></i>
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="card glass-card p-4 text-center border-0">
+                    <div class="stat-icon bg-primary bg-opacity-10 text-primary mx-auto">
+                        <i class="bi bi-cash-stack fs-4"></i>
+                    </div>
+                    <p class="text-muted mb-1 small text-uppercase fw-bold">Rent Amount</p>
+                    <h4 class="fw-bold mb-0">KES {{ tenant.rent_amount|floatformat:0 }}</h4>
                 </div>
-                <h4 class="fw-bold">{{ user.get_full_name|default:user.username }}</h4>
-                <p class="text-muted">{{ tenant.property.name }}</p>
-                <hr>
-                <div class="text-start small">
-                    <p class="d-flex justify-content-between"><strong>M-Pesa:</strong> <span>{{ tenant.phone_number }}</span></p>
-                    <p class="d-flex justify-content-between"><strong>Monthly Rent:</strong> <span>KES {{ tenant.rent_amount }}</span></p>
+            </div>
+            <div class="col-md-4">
+                <div class="card glass-card p-4 text-center border-0">
+                    <div class="stat-icon bg-info bg-opacity-10 text-info mx-auto">
+                        <i class="bi bi-droplet fs-4"></i>
+                    </div>
+                    <p class="text-muted mb-1 small text-uppercase fw-bold">Water Rate</p>
+                    <h4 class="fw-bold mb-0">KES 100 <span class="fs-6 text-muted">/ Unit</span></h4>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card glass-card p-4 text-center border-0">
+                    <div class="stat-icon bg-warning bg-opacity-10 text-warning mx-auto">
+                        <i class="bi bi-lightning-charge fs-4"></i>
+                    </div>
+                    <p class="text-muted mb-1 small text-uppercase fw-bold">Electricity Rate</p>
+                    <h4 class="fw-bold mb-0">KES 25 <span class="fs-6 text-muted">/ Unit</span></h4>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-8">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white py-3">
-                <h5 class="mb-0 fw-bold"><i class="bi bi-clock-history me-2 text-primary"></i>My Billing History</h5>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="bg-light">
-                            <tr>
-                                <th class="ps-4">Date</th>
-                                <th>Breakdown</th>
-                                <th>Total Bill</th>
-                                <th>Status</th>
-                                <th class="text-end pe-4">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for bill in bills %}
-                            <tr>
-                                <td class="ps-4">
-                                    <span class="d-block fw-bold text-dark">{{ bill.billing_date|date:"M d, Y" }}</span>
-                                    <small class="text-muted">Bill #{{ bill.id }}</small>
-                                </td>
-                                <td>
-                                    <small class="d-block text-muted">Water: {{ bill.water_reading }} units</small>
-                                    <small class="d-block text-muted">Elec: {{ bill.elecricity_reading }} units</small>
-                                </td>
-                                <td>
-                                    <span class="fw-bold text-primary">KES {{ bill.total_amount }}</span>
-                                </td>
-                                <td>
-                                    {% if bill.is_paid %}
-                                        <span class="badge bg-success-subtle text-success border border-success border-opacity-25 px-2">Paid</span>
-                                    {% else %}
-                                        <span class="badge bg-danger-subtle text-danger border border-danger border-opacity-25 px-2">Unpaid</span>
-                                    {% endif %}
-                                </td>
-                                <td class="text-end pe-4">
-                                    {% if not bill.is_paid %}
-                                        <a href="{% url 'pay_bill' bill.id %}" class="btn btn-primary btn-sm rounded-pill px-3">Pay Now</a>
-                                    {% else %}
-                                        <a href="{% url 'download_receipt' bill.id %}" class="btn btn-outline-dark btn-sm rounded-pill px-3">
-                                            <i class="bi bi-download me-1"></i>Receipt
+        <div class="row">
+            <div class="col-12">
+                <div class="card glass-card border-0 overflow-hidden">
+                    <div class="card-header bg-transparent py-4 px-4 border-0 d-flex justify-content-between align-items-center">
+                        <h5 class="fw-bold mb-0"><i class="bi bi-clock-history me-2 text-primary"></i>Payment History</h5>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-white bg-opacity-50">
+                                <tr>
+                                    <th class="ps-4">Date</th>
+                                    <th>Consumption</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th class="text-end pe-4">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for bill in bills %}
+                                <tr>
+                                    <td class="ps-4">
+                                        <span class="fw-bold text-dark">{{ bill.billing_date|date:"d M Y" }}</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex gap-3">
+                                            <small><i class="bi bi-droplet text-info me-1"></i>{{ bill.water_reading }}</small>
+                                            <small><i class="bi bi-lightning text-warning me-1"></i>{{ bill.elecricity_reading }}</small>
+                                        </div>
+                                    </td>
+                                    <td class="fw-bold text-dark">KES {{ bill.total_amount|floatformat:0 }}</td>
+                                    <td>
+                                        {% if bill.is_paid %}
+                                        <span class="badge bg-success-subtle text-success px-3 rounded-pill">Paid</span>
+                                        {% else %}
+                                        <span class="badge bg-danger-subtle text-danger px-3 rounded-pill">Pending</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <a href="{% url 'view_receipt' bill.id %}" class="btn btn-sm btn-white border rounded-pill px-4 shadow-sm">
+                                            <i class="bi bi-file-earmark-pdf me-1"></i>Receipt
                                         </a>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="5" class="text-center py-5 text-muted">
-                                    <i class="bi bi-inbox display-6 d-block mb-2"></i>
-                                    No billing records found.
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

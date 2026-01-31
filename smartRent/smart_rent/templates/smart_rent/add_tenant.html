@@ -20,6 +20,15 @@
                             <div class="col-12">{{ form.email|as_crispy_field }}</div>
                         </div>
 
+                        <div class="bg-light p-3 rounded-3 mb-4 border border-primary border-opacity-10">
+                            <h6 class="fw-bold text-primary mb-3"><i class="bi bi-shield-lock me-2"></i>Security & Login</h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">{{ form.password|as_crispy_field }}</div>
+                                <div class="col-md-6">{{ form.confirm_password|as_crispy_field }}</div>
+                            </div>
+                            <small class="text-muted">Set a password for the tenant to use with their email.</small>
+                        </div>
+
                         <hr class="text-muted opacity-25">
 
                         <div class="row g-3">
@@ -41,7 +50,7 @@
     </div>
 </div>
 
-<script id="property-data" type="application/json">
+<script id="property-prices" type="application/json">
     {
         {% for prop in properties %}
             "{{ prop.id }}": "{{ prop.price_per_month }}"{% if not forloop.last %},{% endif %}
@@ -51,17 +60,13 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Parse data from the hidden JSON script to avoid IDE red lines
-        const propertyPrices = JSON.parse(document.getElementById('property-data').textContent);
-        
+        const prices = JSON.parse(document.getElementById('property-prices').textContent);
         const propertySelect = document.querySelector('#id_property');
         const rentInput = document.querySelector('#id_rent_amount');
 
         if (propertySelect && rentInput) {
             propertySelect.addEventListener('change', function() {
-                const selectedId = this.value;
-                // Automatically populate the rent field
-                rentInput.value = propertyPrices[selectedId] || "0.00";
+                rentInput.value = prices[this.value] || "0.00";
             });
         }
     });

@@ -5,7 +5,40 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-bold">Pending Payments</h2>
-    <span class="badge bg-danger fs-6">{{ bills.count }} Bills Outstanding</span>
+    <div class="d-flex align-items-center">
+        <span class="badge bg-danger fs-6 me-3">{{ bills.count }} Bills Outstanding</span>
+        
+        {% if bills %}
+        <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#clearAllModal">
+            <i class="bi bi-check2-all me-1"></i> Clear All Bills
+        </button>
+
+        <div class="modal fade" id="clearAllModal" tabindex="-1" aria-labelledby="clearAllModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg">
+                    <div class="modal-header bg-danger text-white border-0">
+                        <h5 class="modal-title fw-bold" id="clearAllModalLabel">Confirm Action</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center p-4">
+                        <div class="mb-3">
+                            <i class="bi bi-exclamation-triangle-fill text-warning" style="font-size: 3rem;"></i>
+                        </div>
+                        <h4 class="fw-bold">Clear All Bills?</h4>
+                        <p class="text-muted">You are about to mark all <strong>{{ bills.count }}</strong> outstanding bills as paid. This will be updated on the tenants' portals immediately.</p>
+                    </div>
+                    <div class="modal-footer border-0 justify-content-center pb-4">
+                        <button type="button" class="btn btn-light rounded-pill px-4 me-2" data-bs-dismiss="modal">Cancel</button>
+                        <form action="{% url 'clear_all_bills' %}" method="POST" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger rounded-pill px-4">Yes, Clear All</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
 </div>
 
 <div class="row">
@@ -18,8 +51,10 @@
                         <i class="bi bi-person-fill fs-4"></i>
                     </div>
                     <div>
-                        <h5 class="card-title mb-0">{{ bill.tenant.user.get_full_name }}</h5>
-                        <small class="text-muted">Unit: {{ bill.tenant.property.name }}</small>
+                        <h5 class="card-title mb-0">
+                            {{ bill.tenant.full_name|default:bill.tenant.user.get_full_name|default:bill.tenant.user.username }}
+                        </h5>
+                        <small class="text-muted">Unit: {{ bill.tenant.property.name|default:"Unassigned" }}</small>
                     </div>
                 </div>
                 <hr>
@@ -30,6 +65,10 @@
                 <div class="d-flex justify-content-between mb-3">
                     <span>Electricity:</span>
                     <span class="fw-bold">{{ bill.elecricity_reading }} units</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3 border-top pt-2">
+                    <span class="fw-bold">Total Due:</span>
+                    <span class="text-danger fw-bold">KES {{ bill.total_amount }}</span>
                 </div>
                 <a href="{% url 'pay_bill' bill.id %}" class="btn btn-success w-100 py-2 fw-bold">
                     <i class="bi bi-phone me-2"></i>Request M-Pesa Payment

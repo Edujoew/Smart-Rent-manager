@@ -1,0 +1,60 @@
+{% extends "smart_rent/base.html" %}
+
+{% block title %}Edit Tenant | SmartRent{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-dark text-white py-3">
+                    <h5 class="mb-0"><i class="bi bi-person-gear me-2"></i>Update Tenant Details</h5>
+                </div>
+                <div class="card-body p-4">
+                    <p class="text-muted small mb-4">
+                        Update information for <strong>{{ tenant.user.username }}</strong>. 
+                        Assigning a property will automatically update the rent amount based on property price.
+                    </p>
+
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Full Name</label>
+                            {{ form.full_name }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Assign Property</label>
+                            {{ form.property }}
+                            <div class="form-text text-primary small">
+                                <i class="bi bi-info-circle"></i> Selecting a house changes status from "Unassigned"
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Phone Number</label>
+                                {{ form.phone_number }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Rent Amount (KES)</label>
+                                {{ form.rent_amount }}
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save me-2"></i>Save Changes
+                            </button>
+                            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

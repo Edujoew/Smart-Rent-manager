@@ -1,0 +1,107 @@
+{% extends 'smart_rent/base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-print-none mb-4 d-flex justify-content-between align-items-center">
+        <a href="{% url 'tenant_portal' %}" class="btn btn-outline-secondary rounded-pill">
+            <i class="bi bi-arrow-left me-1"></i> Back to Portal
+        </a>
+        <button onclick="window.print()" class="btn btn-dark rounded-pill px-4 shadow">
+            <i class="bi bi-printer me-2"></i> Print or Save as PDF
+        </button>
+    </div>
+
+    <div class="card border-0 shadow-lg mx-auto overflow-hidden" style="max-width: 800px; border-radius: 20px;">
+        <div class="bg-primary p-4 text-white">
+            <div class="row align-items-center">
+                <div class="col-6">
+                    <h2 class="fw-bold mb-0">Smart<span class="text-warning">Rent</span></h2>
+                    <p class="small opacity-75 mb-0">Official Payment Receipt</p>
+                </div>
+                <div class="col-6 text-end">
+                    <h5 class="mb-0 text-uppercase tracking-wider">Receipt #{{ bill.id }}</h5>
+                    <p class="small opacity-75 mb-0">Issued: {% now "d M Y, H:i" %}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body p-5 bg-white">
+            <div class="row mb-5">
+                <div class="col-6">
+                    <h6 class="text-muted text-uppercase small fw-bold mb-3">Landlord / Manager</h6>
+                    <p class="mb-0 fw-bold text-dark fs-5">John Edwards</p>
+                    <p class="text-muted small">SmartRent Property Management</p>
+                </div>
+                <div class="col-6 text-end">
+                    <h6 class="text-muted text-uppercase small fw-bold mb-3">Billed To</h6>
+                    <p class="mb-0 fw-bold text-dark fs-5">{{ bill.tenant.user.get_full_name|default:bill.tenant.user.username }}</p>
+                    <p class="text-muted small mb-0">Unit: {{ bill.tenant.property.name }}</p>
+                    <p class="text-muted small">{{ bill.tenant.phone_number }}</p>
+                </div>
+            </div>
+
+            <div class="table-responsive mb-4">
+                <table class="table table-borderless">
+                    <thead class="border-bottom text-muted small text-uppercase">
+                        <tr>
+                            <th class="py-3">Description</th>
+                            <th class="text-center py-3">Units/Usage</th>
+                            <th class="text-end py-3">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-dark">
+                        <tr class="border-bottom">
+                            <td class="py-4">
+                                <div class="fw-bold">Monthly House Rent</div>
+                                <small class="text-muted">Standard residency fee for {{ bill.billing_date|date:"F Y" }}</small>
+                            </td>
+                            <td class="text-center py-4">Flat Rate</td>
+                            <td class="text-end py-4 fw-bold">KES {{ bill.tenant.rent_amount|floatformat:2 }}</td>
+                        </tr>
+                        <tr class="border-bottom">
+                            <td class="py-4">
+                                <div class="fw-bold">Utility Consumption</div>
+                                <small class="text-muted">Water ({{ bill.water_reading }}) & Electricity ({{ bill.elecricity_reading }})</small>
+                            </td>
+                            <td class="text-center py-4">Metred</td>
+                            <td class="text-end py-4">Included</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2" class="text-end pt-4 fw-bold text-muted">TOTAL PAID</td>
+                            <td class="text-end pt-4 fw-bold text-primary fs-3">KES {{ bill.total_amount|floatformat:2 }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="row align-items-center mt-5 pt-4 border-top">
+                <div class="col-8">
+                    <h6 class="fw-bold text-dark mb-1">Payment Verification</h6>
+                    <p class="text-muted small mb-0">This is a computer-generated receipt. Scan the QR code to verify this transaction on our secure server.</p>
+                </div>
+                <div class="col-4 text-end">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data={{ request.build_absolute_uri }}" 
+                         alt="QR Verification" class="img-fluid border p-1 rounded bg-light" style="max-width: 90px;">
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer bg-light text-center py-3 border-0">
+            <p class="small text-muted mb-0">© 2026 SmartRent PropTech | Developed by John Edwards</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Styling for the print/PDF version */
+    @media print {
+        .navbar, .d-print-none, footer { display: none !important; }
+        body { background-color: white !important; padding: 0 !important; }
+        .card { box-shadow: none !important; border: none !important; margin: 0 !important; width: 100% !important; max-width: 100% !important; }
+        .container { width: 100% !important; max-width: 100% !important; padding: 0 !important; }
+    }
+    .tracking-wider { letter-spacing: 0.1rem; }
+</style>
+{% endblock %}

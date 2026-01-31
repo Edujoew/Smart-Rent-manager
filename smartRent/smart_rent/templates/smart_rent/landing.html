@@ -3,56 +3,184 @@
 {% block title %}Welcome to SmartRent | PropTech Management{% endblock %}
 
 {% block content %}
-<div class="row align-items-center py-5">
-    <div class="col-lg-6">
-        <h1 class="display-3 fw-bold lh-1 mb-3">Manage Your Property <span class="text-primary">Smarter.</span></h1>
-        <p class="lead text-muted mb-4">
-            The all-in-one platform for landlords and tenants. Track utility bills, manage payments, and stay connected with your property manager seamlessly.
-        </p>
-        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-            <a href="{% url 'register' %}" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Get Started</a>
-            <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg px-4">Sign In</a>
-        </div>
-    </div>
-    <div class="col-lg-6 d-none d-lg-block">
-        <div class="card bg-primary text-white p-5 shadow-lg border-0">
-            <div class="card-body text-center">
-                <i class="bi bi-houses-fill" style="font-size: 6rem;"></i>
-                <h3 class="mt-3 fw-bold">PropTech Simplified</h3>
+<div class="hero-section text-white rounded-4 shadow-lg mb-5 overflow-hidden position-relative">
+    <div class="hero-overlay p-5 py-lg-5">
+        <div class="row align-items-center py-5">
+            <div class="col-lg-7">
+                <h1 class="display-3 fw-bold lh-1 mb-3">Manage Your Property <span class="text-info">Smarter.</span></h1>
+                <p class="lead mb-4 opacity-90">
+                    The all-in-one platform for landlords and tenants. Track utility bills, manage payments, and stay connected seamlessly.
+                </p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    <a href="{% url 'register' %}" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold shadow-sm">Get Started</a>
+                    <a href="{% url 'login' %}" class="btn btn-light btn-lg px-4 fw-bold">Sign In</a>
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-block">
+                <div class="glass-card p-4 rounded-4 text-center border border-white border-opacity-25">
+                    <i class="bi bi-houses-fill" style="font-size: 5rem;"></i>
+                    <h3 class="mt-3 fw-bold">PropTech Simplified</h3>
+                    <p class="mb-0">Tailored for Kenyan Landlords</p>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<hr class="my-5">
+<div class="container mb-5">
+    <div class="row text-center g-4">
+        <div class="col-12">
+            <a href="{% url 'landing' %}" class="btn {% if not request.GET.category %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill px-4 mb-3 shadow-sm">All Rentals</a>
+        </div>
+        
+        <div class="col-md-3">
+            <h6 class="fw-bold text-muted text-uppercase small mb-3">Apartments & Flats</h6>
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+                <a href="{% url 'landing' %}?category=1-Bedroom+Apartment" class="btn btn-sm {% if request.GET.category == '1-Bedroom Apartment' %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill">1-Bedroom</a>
+                <a href="{% url 'landing' %}?category=2-Bedroom+Apartment" class="btn btn-sm {% if request.GET.category == '2-Bedroom Apartment' %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill">2-Bedroom</a>
+                <a href="{% url 'landing' %}?category=3-Bedroom+Apartment" class="btn btn-sm {% if request.GET.category == '3-Bedroom Apartment' %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill">3-Bedroom</a>
+                <a href="{% url 'landing' %}?category=Executive/Serviced+Apartment" class="btn btn-sm {% if request.GET.category == 'Executive/Serviced Apartment' %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill">Executive</a>
+            </div>
+        </div>
 
-<div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
-    <div class="col d-flex align-items-start">
-        <div class="icon-square bg-light text-primary flex-shrink-0 me-3 p-3 rounded shadow-sm">
-            <i class="bi bi-lightning-charge-fill"></i>
+        <div class="col-md-3">
+            <h6 class="fw-bold text-muted text-uppercase small mb-3">Standalone Units</h6>
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+                <a href="{% url 'landing' %}?category=Standalone+Residential+Unit" class="btn btn-sm {% if request.GET.category == 'Standalone Residential Unit' %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill">Residential Units</a>
+                <a href="{% url 'landing' %}?category=Bungalow" class="btn btn-sm {% if request.GET.category == 'Bungalow' %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill">Bungalows</a>
+                <a href="{% url 'landing' %}?category=Maisonette" class="btn btn-sm {% if request.GET.category == 'Maisonette' %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill">Maisonettes</a>
+            </div>
         </div>
-        <div>
-            <h3 class="fs-4 fw-bold">Fast Invoicing</h3>
-            <p>Landlords can generate utility bills for electricity and water in just two clicks.</p>
+
+        <div class="col-md-3">
+            <h6 class="fw-bold text-muted text-uppercase small mb-3">Premium</h6>
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+                <a href="{% url 'landing' %}?category=Townhouse" class="btn btn-sm {% if request.GET.category == 'Townhouse' %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill">Townhouses</a>
+                <a href="{% url 'landing' %}?category=Villa" class="btn btn-sm {% if request.GET.category == 'Villa' %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill">Villas</a>
+            </div>
         </div>
-    </div>
-    <div class="col d-flex align-items-start">
-        <div class="icon-square bg-light text-primary flex-shrink-0 me-3 p-3 rounded shadow-sm">
-            <i class="bi bi-shield-check"></i>
-        </div>
-        <div>
-            <h3 class="fs-4 fw-bold">Secure Payments</h3>
-            <p>Tenants can track their payment history and see outstanding balances in real-time.</p>
-        </div>
-    </div>
-    <div class="col d-flex align-items-start">
-        <div class="icon-square bg-light text-primary flex-shrink-0 me-3 p-3 rounded shadow-sm">
-            <i class="bi bi-graph-up-arrow"></i>
-        </div>
-        <div>
-            <h3 class="fs-4 fw-bold">Data Insights</h3>
-            <p>Monitor property occupancy and financial health through an intuitive dashboard.</p>
+
+        <div class="col-md-3">
+            <h6 class="fw-bold text-muted text-uppercase small mb-3">Specialized</h6>
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+                <a href="{% url 'landing' %}?category=Student+Hostel/Housing" class="btn btn-sm {% if request.GET.category == 'Student Hostel/Housing' %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill">Hostels</a>
+                <a href="{% url 'landing' %}?category=Airbnb/Short-Term+Rental" class="btn btn-sm {% if request.GET.category == 'Airbnb/Short-Term Rental' %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill">Airbnb</a>
+            </div>
         </div>
     </div>
 </div>
+
+<div class="bg-white p-4 rounded-4 shadow-sm mb-5 border border-primary-subtle">
+    <h2 class="h4 mb-4 fw-bold text-dark"><i class="bi bi-search me-2 text-primary"></i>Find Your Next Home</h2>
+    <form method="GET" action="{% url 'landing' %}" class="row g-3">
+        <div class="col-md-5">
+            <label class="form-label fw-semibold">Specific Type</label>
+            <select name="category" class="form-select border-primary-subtle">
+                <option value="">All Types</option>
+                <optgroup label="Apartments">
+                    <option value="1-Bedroom Apartment" {% if request.GET.category == '1-Bedroom Apartment' %}selected{% endif %}>1-Bedroom Apartment</option>
+                    <option value="2-Bedroom Apartment" {% if request.GET.category == '2-Bedroom Apartment' %}selected{% endif %}>2-Bedroom Apartment</option>
+                    <option value="3-Bedroom Apartment" {% if request.GET.category == '3-Bedroom Apartment' %}selected{% endif %}>3-Bedroom Apartment</option>
+                    <option value="Executive/Serviced Apartment" {% if request.GET.category == 'Executive/Serviced Apartment' %}selected{% endif %}>Executive/Serviced Apartment</option>
+                </optgroup>
+                <optgroup label="Standalone Units">
+                    <option value="Standalone Residential Unit" {% if request.GET.category == 'Standalone Residential Unit' %}selected{% endif %}>Standalone Residential Unit</option>
+                    <option value="Bungalow" {% if request.GET.category == 'Bungalow' %}selected{% endif %}>Bungalow</option>
+                    <option value="Maisonette" {% if request.GET.category == 'Maisonette' %}selected{% endif %}>Maisonette</option>
+                    <option value="Townhouse" {% if request.GET.category == 'Townhouse' %}selected{% endif %}>Townhouse</option>
+                    <option value="Villa" {% if request.GET.category == 'Villa' %}selected{% endif %}>Villa</option>
+                </optgroup>
+                <optgroup label="Other">
+                    <option value="Student Hostel/Housing" {% if request.GET.category == 'Student Hostel/Housing' %}selected{% endif %}>Student Hostel/Housing</option>
+                    <option value="Airbnb/Short-Term Rental" {% if request.GET.category == 'Airbnb/Short-Term Rental' %}selected{% endif %}>Airbnb/Short-Term Rental</option>
+                </optgroup>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Max Monthly Budget (KES)</label>
+            <input type="number" name="max_price" class="form-control border-primary-subtle" placeholder="e.g. 5000" value="{{ request.GET.max_price }}">
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100 fw-bold py-2 shadow-sm">
+                Search Properties
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
+    {% for property in properties %}
+    <div class="col">
+        <div class="card h-100 border-0 shadow-sm property-card rounded-3 overflow-hidden">
+            <div class="bg-light d-flex flex-column align-items-center justify-content-center" style="height: 200px; border-bottom: 1px solid #f0f0f0;">
+                <i class="bi bi-house-door text-muted opacity-25" style="font-size: 4rem;"></i>
+                <span class="text-muted small fw-bold mt-2" style="letter-spacing: 1px; text-transform: uppercase; opacity: 0.5;">Smart Rent Manager</span>
+            </div>
+            
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <span class="badge bg-info-subtle text-info rounded-pill px-3">{{ property.category }}</span>
+                    <h5 class="fw-bold text-primary mb-0">KES {{ property.price_per_month|floatformat:0 }}</h5>
+                </div>
+                <h4 class="card-title fw-bold text-dark">{{ property.name }}</h4>
+                
+                <p class="mb-3">
+                    <a href="https://www.google.com/maps/search/?api=1&query={{ property.address|urlencode }}" target="_blank" class="text-decoration-none text-muted small">
+                        <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                        {{ property.address|default:"Nairobi, Kenya" }}
+                        <span class="ms-1 text-primary hover-underline">(View on Map)</span>
+                    </a>
+                </p>
+                
+                <hr class="text-muted opacity-25">
+                <div class="d-grid">
+                    <a href="{% url 'apply_property' property.id %}" class="btn btn-outline-primary fw-bold">Apply Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+        <div class="mb-3">
+            <i class="bi bi-emoji-frown display-4 text-muted"></i>
+        </div>
+        <p class="lead text-muted">No properties found matching your criteria.</p>
+        <a href="{% url 'landing' %}" class="btn btn-link fw-bold">View all available properties</a>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    .hero-section {
+        background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/564730784.jpg?k=62d1662f0d9c9c35b55c38772bc26b0e295894082a5b4b8a69f790c4991286a9&o=');
+        background-size: cover;
+        background-position: center;
+        min-height: 500px;
+    }
+    
+    .hero-overlay {
+        background: linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 100%);
+        min-height: 500px;
+        display: flex;
+        align-items: center;
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+    }
+
+    .hover-underline:hover {
+        text-decoration: underline;
+    }
+
+    .property-card { 
+        transition: transform 0.3s ease, box-shadow 0.3s ease; 
+        border: 1px solid #f0f0f0 !important;
+    }
+    .property-card:hover { 
+        transform: translateY(-8px); 
+        box-shadow: 0 1rem 3rem rgba(0,0,0,.1) !important;
+    }
+</style>
 {% endblock %}
